@@ -23,15 +23,15 @@ EOT
     remote_virtual_network_id              = string
     resource_group_name                    = string
     virtual_network_name                   = string
-    allow_forwarded_traffic                = optional(bool, false)
-    allow_gateway_transit                  = optional(bool, false)
-    allow_virtual_network_access           = optional(bool, true)
+    allow_forwarded_traffic                = optional(bool) # Default: false
+    allow_gateway_transit                  = optional(bool) # Default: false
+    allow_virtual_network_access           = optional(bool) # Default: true
     local_subnet_names                     = optional(list(string))
     only_ipv6_peering_enabled              = optional(bool)
-    peer_complete_virtual_networks_enabled = optional(bool, true)
+    peer_complete_virtual_networks_enabled = optional(bool) # Default: true
     remote_subnet_names                    = optional(list(string))
     triggers                               = optional(map(string))
-    use_remote_gateways                    = optional(bool, false)
+    use_remote_gateways                    = optional(bool) # Default: false
   }))
 }
 
