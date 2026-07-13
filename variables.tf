@@ -23,32 +23,16 @@ EOT
     remote_virtual_network_id              = string
     resource_group_name                    = string
     virtual_network_name                   = string
-    allow_forwarded_traffic                = optional(bool) # Default: false
-    allow_gateway_transit                  = optional(bool) # Default: false
-    allow_virtual_network_access           = optional(bool) # Default: true
+    allow_forwarded_traffic                = optional(bool)
+    allow_gateway_transit                  = optional(bool)
+    allow_virtual_network_access           = optional(bool)
     local_subnet_names                     = optional(list(string))
     only_ipv6_peering_enabled              = optional(bool)
-    peer_complete_virtual_networks_enabled = optional(bool) # Default: true
+    peer_complete_virtual_networks_enabled = optional(bool)
     remote_subnet_names                    = optional(list(string))
     triggers                               = optional(map(string))
-    use_remote_gateways                    = optional(bool) # Default: false
+    use_remote_gateways                    = optional(bool)
   }))
-  validation {
-    condition = alltrue([
-      for k, v in var.virtual_network_peerings : (
-        v.local_subnet_names == null || (length(v.local_subnet_names) > 0)
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.virtual_network_peerings : (
-        v.remote_subnet_names == null || (length(v.remote_subnet_names) > 0)
-      )
-    ])
-    error_message = "must not be empty"
-  }
   # --- Unconfirmed validation candidates, derived from azurerm_virtual_network_peering's provider source ---
   # Not auto-enabled: either a bespoke provider validator we can't safely translate,
   # or a path that crosses a list-typed block (needs its own for_each wrapping).
@@ -71,5 +55,11 @@ EOT
   #   source:    [from commonids.ValidateVirtualNetworkID] !ok
   # path: remote_virtual_network_id
   #   source:    [from commonids.ValidateVirtualNetworkID] err != nil
+  # path: local_subnet_names[*]
+  #   condition: length(value) > 0
+  #   message:   must not be empty
+  # path: remote_subnet_names[*]
+  #   condition: length(value) > 0
+  #   message:   must not be empty
 }
 
